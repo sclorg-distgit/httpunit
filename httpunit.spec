@@ -34,7 +34,7 @@
 
 Name:           %{?scl_prefix}%{pkg_name}
 Version:        1.7
-Release:        15.11%{?dist}
+Release:        15.12%{?dist}
 Epoch:          0
 Summary:        Automated web site testing toolkit
 License:        MIT and ASL 2.0
@@ -56,7 +56,7 @@ URL:            http://httpunit.sourceforge.net/
 BuildRequires:  %{?scl_prefix_java_common}javapackages-tools
 BuildRequires:  %{?scl_prefix_java_common}ant >= 0:1.6
 BuildRequires:  %{?scl_prefix_java_common}nekohtml
-BuildRequires:  maven30-jtidy
+BuildRequires:  %{?scl_prefix}jtidy
 BuildRequires:  %{?scl_prefix_java_common}junit >= 0:3.8
 BuildRequires:  %{?scl_prefix_java_common}tomcat-servlet-3.0-api
 BuildRequires:  %{?scl_prefix_java_common}javamail >= 0:1.3
@@ -93,7 +93,7 @@ Documentation for %{pkg_name}
 
 %prep
 %setup -q -n %{pkg_name}-%{version}
-%{?scl:scl enable maven30 %{scl} - <<"EOF"}
+%{?scl:scl enable %{scl} - <<"EOF"}
 set -e -x
 # patch to work with rhino 1.5
 %patch1 -b .sav
@@ -121,7 +121,7 @@ mv %{SOURCE5} LICENSE-ASL
 
 
 %build
-%{?scl:scl enable maven30 %{scl} - <<"EOF"}
+%{?scl:scl enable %{scl} - <<"EOF"}
 set -e -x
 export CLASSPATH="$(build-classpath javamail):%{_root_datadir}/java/rhino.jar"
 export ANT_OPTS="-Dfile.encoding=iso-8859-1"
@@ -130,7 +130,7 @@ ant -Dbuild.compiler=modern -Dbuild.sysclasspath=last \
 %{?scl:EOF}
 
 %install
-%{?scl:scl enable maven30 %{scl} - <<"EOF"}
+%{?scl:scl enable %{scl} - <<"EOF"}
 set -e -x
 mkdir -p $RPM_BUILD_ROOT%{_javadir}
 cp -p lib/%{pkg_name}.jar $RPM_BUILD_ROOT%{_javadir}/%{pkg_name}.jar
@@ -165,6 +165,9 @@ popd
 %doc doc/*
 
 %changelog
+* Mon Jan 11 2016 Michal Srb <msrb@redhat.com> - 0:1.7-15.12
+- maven33 rebuild #2
+
 * Sat Jan 09 2016 Michal Srb <msrb@redhat.com> - 0:1.7-15.11
 - maven33 rebuild
 
